@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../css/master.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+  <title>Site D.MINGO</title>
+</head>
+
+<body>
+  <div class="container">
+    <img src="../image/apple.png" alt="logo">
+    <h1>Cooperative 2.0</h1>
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+    <div class="container">
+      <img src="../image/maps.jpg" alt="" id="map">
+
+    </div>
+
+    <div>
+      <h2>Livraison en cours</h2>
+      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium quam consectetur, veniam perferendis
+        offici</p>
+      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium quam consectetur, veniam perferendis
+        offici</p>
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">Contacter un
+        livreur </button>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <img src="../image/camion.png" alt="">
+            <h5 class="modal-title" id="exampleModalLabel">Contacter un Livreur</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="contact" method="post">
+            <div class="modal-body">
+              <p>Adresse :</p>
+              <textarea name="" id="" cols="30" rows="10">
+                        </textarea>
+              <input type="radio" id="ordre" name="type" value="ordre">
+              <label for="ordre">Ordre</label>
+              <input type="radio" id="mission" name="type" value="mission">
+              <label for="mission">Mission</label>
+              <input type="radio" id="message" name="type" value="message">
+              <label for="message">Message</label>
+              <input type="radio" id="stop" name="type" value="stop">
+              <label for="stop">Stop</label>
+              <br>
+              <label for="livreur">Livreur :</label>
+              <select name="livreur" id="">
+                <option value="1">Livreur 1</option>
+                <option value="2">Livreur 2</option>
+                <option value="3">Livreur 3</option>
+                <option value="4">Livreur 4</option>
+                <option value="5">Livreur 5</option>
+
+              </select>
+              <label>Adresse de Livraison</label>
+              <input type="text">
+
+            </div>
+            <div class="modal-footer">
+              <button id="submit" type="button">Envoyer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="#">About</a>
+      <a href="#">Services</a>
+      <a href="#">Clients</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+
+
+
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.display = "block";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidenav").style.display = "none";
+    }
+  </script>
+  <script>
+    $('#submit').click(function () {
+      var form = $('#contact');
+      var formData = form.serialize();
+      $.ajax({
+        type: "POST",
+        url: 'http://vps.e-mingo.net/coopagri/app/index.php?c=message&a=getMessage',
+        data: formData,
+        success: function (data) {
+          console.log("iok");
+        },
+        error: function (data) {
+          console.log("false");
+        }
+
+      });
+    });
+  </script>
+
+</body>
+
+</html>

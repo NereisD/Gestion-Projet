@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Cooperative 2.0 - Menu Livreur</title>
+    <link rel="stylesheet" href="../css/master.css" />
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/font-awesome.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js%22%3E"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+</head>
+
+<body>
+    <section>
+        <img alt="Logo">
+        <h1>Cooperative 2.0</h1>
+    </section>
+
+
+    <section class="map">
+        <img src="../image/maps.jpg" alt="" id="map">
+        </div>
+    </section>
+    <section>
+        <h1>Livraison en cours</h1>
+        <div>
+            <div>
+                <i class="fa fa-home"></i>
+                <!--Récupérer adresse depuis JSON-->
+            </div>
+            <div>
+                <i class="fa fa-user"></i>
+
+                <!--Récupérer client depuis JSON-->
+            </div>
+            <div>
+                <i class="fa fa-clock-o"></i>
+                <!--Récupérer horloge depuis JSON-->
+            </div>
+            <div>
+                <i class="fa fa-envelope"></i>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Contacter le client
+                </button>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fa fa-envelope"></i>
+                                    Contacter le client</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Client :</h5>
+                                <select>
+                                    <option>Fournisseur1</option>
+                                    <option>Fournisseur2</option>
+                                    <!--INSERER LES DIFFERENTS CLIENTS-->
+                                </select>
+                                <h5>Contenu du message : </h5>
+                                <textarea cols="30" rows="5"></textarea>
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-primary">Envoyer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <section>
+        <button type="button" class="btn btn-outline-primary">Commencer la livraison</button>
+    </section>
+
+</body>
+
+</html>
