@@ -121,10 +121,11 @@ html, body {
   margin: 2%;
 }
 input {
+  margin: 4%;
   font-size: 24px;
 }
 
 .menu {
 
-  margin-top: 150%;
+  margin-top: 120%;
 }
