@@ -10,7 +10,7 @@
 /* Si l'api ne contient aucune commande à la date du jour on simule une date qui existe dans l'api
 Alors on commente le code si dessus et on décommente la date si dessous */
 
-let dateAff = "2020-03-25";
+let dateAff = "2020-03-25"; //Le 25 mars 2020 contient des commandes donc on peut l'utiliser
 
 //Permet de récupérer les ID des commandes du jour
 function getIdCommandesDuJour() {
@@ -102,18 +102,6 @@ async function test() {
     console.log("ID des commandes du jours");
     console.log(idCommandesDuJour);
 
-    //Pour accéder aux adresses de toutes les commandes du jour 
-    let adressesLivraisonToutesCommandesDuJour = [];
-    let i = 0;
-    $.each(idCommandesDuJour, function (key, val) {
-    getAdresseLivraisonId(val).then(function (adrr) {
-        adressesLivraisonToutesCommandesDuJour[i] = adrr;
-        i++
-    });
-    })
-    console.log("Adresse de livraison de toutes les commandes du jour");
-    console.log(adressesToutesCommandesDuJour);
-
     //Affichage de l'adresse de livraison d'une commande
     let adresseLivraison = await getAdresseLivraisonId(idCommandesDuJour[8]);
     console.log("Adresse de livraison d'une commande passé en paramètre");
@@ -124,4 +112,4 @@ async function test() {
     console.log("Adresses des fournisseurs d'une commande passé en paramètre");
     console.log(adressesFournisseur);
 }
-test();
+//test();

@@ -45,154 +45,8 @@
     </div>
   <div class="col-7 col">
     <div id="map"></div>
-    <script>
-      function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: { lat: 48.856613, lng: 2.352222 }
-        });
-
-        var lineSymbol = {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 8,
-          strokeColor: '#250'
-        };
-
-        directionsService = new google.maps.DirectionsService,
-          directionsDisplay = new google.maps.DirectionsRenderer({
-            map: map,
-            polylineOptions: {
-              strokeColor: 'red',
-              strokeOpacity: 1,
-              icons: [{
-                icon: {
-                  path: google.maps.SymbolPath.CIRCLE,
-                  scale: 9,
-                  strokeColor: '#375',
-                  strokeOpacity: 0.8
-                },
-                offset: '100%'
-              }]
-            }
-          })
-        var waypts = Array();
-        var checkboxArray = ['60 Avenue Montaigne', '6 Rue du Faubourg Saint-Honoré'];
-        for (var i = 0; i < checkboxArray.length; i++) {
-          waypts.push({
-            location: checkboxArray[i],
-            stopover: true
-          });
-        }
-        geocoder = new google.maps.Geocoder();
-
-        var route = adresse2LongLatt(geocoder, map, adresse, waypts);
-        autoRefresh(map);
-
-      }
 
 
-      function adresse2LongLatt(geocoder, map, adresse, waypts) {
-        geocoder.geocode({ 'address': adresse }, function (results, status) {
-          if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-              //rajouter l'icone qu'on recevra
-              map: map,
-              animation: google.maps.Animation.DROP,
-              position: results[0].geometry.location
-            });
-            var route = calculateAndDisplayRoute(directionsService, directionsDisplay, adresse, waypts);
-            return route;
-
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      }
-
-      function moveMarker(map, marker, latlng) {
-        marker.setPosition(latlng);
-        map.panTo(latlng);
-      }
-
-
-      function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, waypts) {
-
-        var first = new google.maps.LatLng(48.880540, 2.443880);
-        var second = new google.maps.LatLng(48.856613, 2.352222);
-        //var waypoints = Array();
-
-        // for (let index = 0; index < waypts.length; index++) {
-        //   waypoints.push({
-        //     location: new google.maps.LatLng(waypts[index].latLng.lat(), waypts[index].latLng.lng()),
-        //     stopover: true
-        //   });
-        // }
-
-        directionsService.route({
-          origin: pointA,
-          destination: pointA,
-          waypoints: waypts,
-          optimizeWaypoints: true,
-          travelMode: google.maps.TravelMode.DRIVING
-        }, function (response, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-            var route = directionsDisplay.getDirections().routes[0];
-            var points = route.overview_path;
-            return points;
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-      }
-
-      /*
-      function moveToStep(yourmarker,yourroute,c) {
-            if (yourroute.getNumSteps() > c) {
-                yourmarker.setLatLng(yourroute.getStep(c).getLatLng());
-                window.setTimeout(function(){
-                    moveToStep(yourmarker,yourroute,c+1);
-                },500);
-            }
-        }
-        */
-
-
-      marker = new google.maps.Marker({ map: map, icon: "http://maps.google.com/mapfiles/ms/micons/blue.png" });
-
-      function autoRefresh(map) {
-        var i, route, marker;
-
-        // route = new google.maps.Polyline({
-        // 	path: [],
-        // 	geodesic : true,
-        // 	strokeColor: '#FF0000',
-        // 	strokeOpacity: 1.0,
-        // 	strokeWeight: 2,
-        // 	editable: false,
-        // 	map:map
-        // });
-
-        // for (i = 0; i < pathCoords.length; i++) {
-        // 	setTimeout(function (coords)
-        // 	{
-        // 		var latlng = new google.maps.LatLng(coords.lat, coords.lng);
-        // 		route.getPath().push(latlng);
-        // 		moveMarker(map, marker, latlng);
-        // 	}, 200 * i, pathCoords[i]);
-        // }
-      }
-
-
-      google.maps.event.addDomListener(window, 'load', initMap);
-
-
-
-    </script>
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
-  </script>
 
 
         <h2>Livraison en cours</h2>
@@ -314,7 +168,7 @@
       <script type="text/javascript">
 
           $('#pause').click(function(){
-            jQuery('message').append('<p class='message'>Vous devez faire une pause !</p>');
+            jQuery('message').append("<p class='message'>Vous devez faire une pause !</p>");
             console.log("test");
           });
       </script>
@@ -370,150 +224,106 @@
 
   </script>
   <script>
-    var adresse = "95 Avenue Baudin";
-
-function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: { lat: 48.856613, lng: 2.352222 }
-  });
-
-  var lineSymbol = {
-    path: google.maps.SymbolPath.CIRCLE,
-    scale: 8,
-    strokeColor: '#250'
-  };
-
-  directionsService = new google.maps.DirectionsService,
-  directionsDisplay = new google.maps.DirectionsRenderer({
-    map: map,
-    polylineOptions: {
-      strokeColor: 'red',
-      strokeOpacity: 1,
-      icons: [{
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 9,
-          strokeColor: '#375',
-          strokeOpacity: 0.8
-        },
-        offset: '100%'
-      }]
+  async function initMap() {
+    let idCommandesDuJour = await getIdCommandesDuJour(); //On récupère les id des commandes du jour
+    let adresseLivraison =  await getAdresseLivraisonId(idCommandesDuJour[2]);  //On récupère l'adresse de livraison de la commande numéro 3
+    let adressesFournisseur = await getAdressesFournisseurId(idCommandesDuJour[2]); //On récupère les adresses des fournisseurs de la commande numéro 3
+    let maPosition = "Campus Maurois, 12 Allée André Maurois, 87065 Limoges"; //On définit le point de départ comme étant l'IUT
+    console.log("Ma position :");
+    console.log(maPosition);
+    console.log("Adresse de livraison :");
+    console.log(adresseLivraison);
+    console.log("Adresse du/des fournisseurs :");
+    console.log(adressesFournisseur);
+    let tableauAdresses = [];
+    for (var i = 0; i < adressesFournisseur.length; i++) {
+      tableauAdresses[i] = adressesFournisseur[i];
     }
-  });
+    tableauAdresses[adressesFournisseur.length] = adresseLivraison; //On crée un tableau d'adresse qui contient tous les fournisseurs et en dernier l'adresse de livraison
+    console.log("Tous les waypoints de l'itinéraire");
+    console.log(tableauAdresses);
 
-  var waypts = Array();
-  var checkboxArray = ['60 Avenue Montaigne', '6 Rue du Faubourg Saint-Honoré'];
-  for (var i = 0; i < checkboxArray.length; i++) {
-    waypts.push({
-      location: checkboxArray[i],
-      stopover: true
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
     });
-  }
-  geocoder = new google.maps.Geocoder();
-
-  var route = adresse2LongLatt(geocoder, map, adresse, waypts);
-  autoRefresh(map);
-}
 
 
-function adresse2LongLatt(geocoder, map, adresse, waypts) {
-  geocoder.geocode({ 'address': adresse }, function (results, status) {
-    if (status === 'OK') {
-      map.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        //rajouter l'icone qu'on recevra
-        map: map,
-        animation: google.maps.Animation.DROP,
-        position: results[0].geometry.location
-      });
-      var route = calculateAndDisplayRoute(directionsService, directionsDisplay, adresse, waypts);
-      return route;
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
-}
-
-function moveMarker(map, marker, latlng) {
-  marker.setPosition(latlng);
-  map.panTo(latlng);
-}
-
-
-function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, waypts) {
-
-  var first = new google.maps.LatLng(48.880540, 2.443880);
-  var second = new google.maps.LatLng(48.856613, 2.352222);
-  //var waypoints = Array();
-
-  // for (let index = 0; index < waypts.length; index++) {
-  //   waypoints.push({
-  //     location: new google.maps.LatLng(waypts[index].latLng.lat(), waypts[index].latLng.lng()),
-  //     stopover: true
-  //   });
-  // }
-  directionsService.route({
-      origin: pointA,
-      destination: pointA,
-      waypoints: waypts,
-      optimizeWaypoints: true,
-      travelMode: google.maps.TravelMode.DRIVING
-    }, function (response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-        var route = directionsDisplay.getDirections().routes[0];
-        var points = route.overview_path;
-        return points;
-      } else {
-        window.alert('Directions request failed due to ' + status);
+    directionsService = new google.maps.DirectionsService,
+    directionsDisplay = new google.maps.DirectionsRenderer({
+      map: map,
+      polylineOptions: {
+        strokeColor: 'red',
+        strokeOpacity: 1,
+        icons: [{
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            strokeColor: '#EA4335',
+            strokeOpacity: 0.8
+          },
+          offset: '100%'
+        }]
       }
     });
-}
 
-/*
-function moveToStep(yourmarker,yourroute,c) {
-  if (yourroute.getNumSteps() > c) {
-      yourmarker.setLatLng(yourroute.getStep(c).getLatLng());
-      window.setTimeout(function(){
-          moveToStep(yourmarker,yourroute,c+1);
-      },500);
+    var waypts = Array();
+    for (var i = 0; i < tableauAdresses.length; i++) {
+      waypts.push({
+        location: tableauAdresses[i],
+        stopover: true
+      });
+    }
+    geocoder = new google.maps.Geocoder();
+
+    var route = adresse2LongLatt(geocoder, map, maPosition, waypts);
   }
-}
-*/
 
 
-marker=new google.maps.Marker({map:map,icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
+  function adresse2LongLatt(geocoder, map, maPosition, waypts) {
+    geocoder.geocode({ 'address': maPosition }, function (results, status) {
+      if (status === 'OK') {
+        map.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+          //rajouter l'icone qu'on recevra
+          map: map,
+          animation: google.maps.Animation.DROP,
+          position: results[0].geometry.location,
+          label: "Vous êtes ici"
+        });
+        var route = calculateAndDisplayRoute(directionsService, directionsDisplay, maPosition, waypts);
+        return route;
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
 
-function autoRefresh(map) {
-  var i, route, marker;
-
-  // route = new google.maps.Polyline({
-  // 	path: [],
-  // 	geodesic : true,
-  // 	strokeColor: '#FF0000',
-  // 	strokeOpacity: 1.0,
-  // 	strokeWeight: 2,
-  // 	editable: false,
-  // 	map:map
-  // });
-
-  // for (i = 0; i < pathCoords.length; i++) {
-  // 	setTimeout(function (coords)
-  // 	{
-  // 		var latlng = new google.maps.LatLng(coords.lat, coords.lng);
-  // 		route.getPath().push(latlng);
-  // 		moveMarker(map, marker, latlng);
-  // 	}, 200 * i, pathCoords[i]);
-  // }
-}
+  function calculateAndDisplayRoute(directionsService, directionsDisplay, maPosition, waypts) {
+    directionsService.route({
+        origin: maPosition,
+        destination: maPosition,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+          var route = directionsDisplay.getDirections().routes[0];
+          var points = route.overview_path;
+          return points;
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+  }
 
 
-google.maps.event.addDomListener(window, 'load', initMap);
-</script>
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
-</script>
+
+
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
+  </script>
 <style>
     #map {
       height: 100%;
