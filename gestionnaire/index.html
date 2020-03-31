@@ -225,19 +225,23 @@
   </script>
   <script>
   async function initMap() {
-    let idCommandesDuJour = await getIdCommandesDuJour();
-    let adresseLivraison =  await getAdresseLivraisonId(idCommandesDuJour[2]);
-    let adressesFournisseur = await getAdressesFournisseurId(idCommandesDuJour[2]);
-    let maPosition = "Campus Maurois, 12 Allée André Maurois, 87065 Limoges";
+    let idCommandesDuJour = await getIdCommandesDuJour(); //On récupère les id des commandes du jour
+    let adresseLivraison =  await getAdresseLivraisonId(idCommandesDuJour[2]);  //On récupère l'adresse de livraison de la commande numéro 3
+    let adressesFournisseur = await getAdressesFournisseurId(idCommandesDuJour[2]); //On récupère les adresses des fournisseurs de la commande numéro 3
+    let maPosition = "Campus Maurois, 12 Allée André Maurois, 87065 Limoges"; //On définit le point de départ comme étant l'IUT
     console.log("Ma position :");
     console.log(maPosition);
     console.log("Adresse de livraison :");
     console.log(adresseLivraison);
     console.log("Adresse du/des fournisseurs :");
     console.log(adressesFournisseur);
-    adressesFournisseur[adressesFournisseur.length] = adresseLivraison;
+    let tableauAdresses = [];
+    for (var i = 0; i < adressesFournisseur.length; i++) {
+      tableauAdresses[i] = adressesFournisseur[i];
+    }
+    tableauAdresses[adressesFournisseur.length] = adresseLivraison; //On crée un tableau d'adresse qui contient tous les fournisseurs et en dernier l'adresse de livraison
     console.log("Tous les waypoints de l'itinéraire");
-    console.log(adressesFournisseur);
+    console.log(tableauAdresses);
 
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,
@@ -263,9 +267,9 @@
     });
 
     var waypts = Array();
-    for (var i = 0; i < adressesFournisseur.length; i++) {
+    for (var i = 0; i < tableauAdresses.length; i++) {
       waypts.push({
-        location: adressesFournisseur[i],
+        location: tableauAdresses[i],
         stopover: true
       });
     }

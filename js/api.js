@@ -10,7 +10,7 @@
 /* Si l'api ne contient aucune commande à la date du jour on simule une date qui existe dans l'api
 Alors on commente le code si dessus et on décommente la date si dessous */
 
-let dateAff = "2020-03-25";
+let dateAff = "2020-03-25"; //Le 25 mars 2020 contient des commandes donc on peut l'utiliser
 
 //Permet de récupérer les ID des commandes du jour
 function getIdCommandesDuJour() {
