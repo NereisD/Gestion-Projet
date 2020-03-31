@@ -45,270 +45,8 @@
     </div>
   <div class="col-7 col">
     <div id="map"></div>
-    <script>
-      function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: { lat: 48.856613, lng: 2.352222 }
-        });
-
-        var lineSymbol = {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 8,
-          strokeColor: '#250'
-        };
-
-        directionsService = new google.maps.DirectionsService,
-          directionsDisplay = new google.maps.DirectionsRenderer({
-            map: map,
-            polylineOptions: {
-              strokeColor: 'red',
-              strokeOpacity: 1,
-              icons: [{
-                icon: {
-                  path: google.maps.SymbolPath.CIRCLE,
-                  scale: 9,
-                  strokeColor: '#375',
-                  strokeOpacity: 0.8
-                },
-                offset: '100%'
-              }]
-            }
-          })
-        var waypts = Array();
-        var checkboxArray = ['60 Avenue Montaigne', '6 Rue du Faubourg Saint-Honoré'];
-        for (var i = 0; i < checkboxArray.length; i++) {
-          waypts.push({
-            location: checkboxArray[i],
-            stopover: true
-          });
-        }
-        geocoder = new google.maps.Geocoder();
-
-        var route = adresse2LongLatt(geocoder, map, adresse, waypts);
-        autoRefresh(map);
-
-      }
 
 
-      function adresse2LongLatt(geocoder, map, adresse, waypts) {
-        geocoder.geocode({ 'address': adresse }, function (results, status) {
-          if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-              //rajouter l'icone qu'on recevra
-              map: map,
-              animation: google.maps.Animation.DROP,
-              position: results[0].geometry.location
-            });
-            var route = calculateAndDisplayRoute(directionsService, directionsDisplay, adresse, waypts);
-            return route;
-
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      }
-
-      function moveMarker(map, marker, latlng) {
-        marker.setPosition(latlng);
-        map.panTo(latlng);
-      }
-
-
-      function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, waypts) {
-
-        var first = new google.maps.LatLng(48.880540, 2.443880);
-        var second = new google.maps.LatLng(48.856613, 2.352222);
-        //var waypoints = Array();
-
-        // for (let index = 0; index < waypts.length; index++) {
-        //   waypoints.push({
-        //     location: new google.maps.LatLng(waypts[index].latLng.lat(), waypts[index].latLng.lng()),
-        //     stopover: true
-        //   });
-        // }
-
-        directionsService.route({
-          origin: pointA,
-          destination: pointA,
-          waypoints: waypts,
-          optimizeWaypoints: true,
-          travelMode: google.maps.TravelMode.DRIVING
-        }, function (response, status) {
-          if (status == google.maps.DirectionsStatus.OK) {
-            directionsDisplay.setDirections(response);
-            var route = directionsDisplay.getDirections().routes[0];
-            var points = route.overview_path;
-            return points;
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
-      }
-
-      /*
-      function moveToStep(yourmarker,yourroute,c) {
-            if (yourroute.getNumSteps() > c) {
-                yourmarker.setLatLng(yourroute.getStep(c).getLatLng());
-                window.setTimeout(function(){
-                    moveToStep(yourmarker,yourroute,c+1);
-                },500);
-            }
-        }
-        */
-
-
-      marker = new google.maps.Marker({ map: map, icon: "http://maps.google.com/mapfiles/ms/micons/blue.png" });
-
-      function autoRefresh(map) {
-        var i, route, marker;
-
-        // route = new google.maps.Polyline({
-        // 	path: [],
-        // 	geodesic : true,
-        // 	strokeColor: '#FF0000',
-        // 	strokeOpacity: 1.0,
-        // 	strokeWeight: 2,
-        // 	editable: false,
-        // 	map:map
-        // });
-
-        // for (i = 0; i < pathCoords.length; i++) {
-        // 	setTimeout(function (coords)
-        // 	{
-        // 		var latlng = new google.maps.LatLng(coords.lat, coords.lng);
-        // 		route.getPath().push(latlng);
-        // 		moveMarker(map, marker, latlng);
-        // 	}, 200 * i, pathCoords[i]);
-        // }
-      }
-
-
-      google.maps.event.addDomListener(window, 'load', initMap);
-
-
-
-    </script>
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
-  </script>
-  <script>
-    //Permet de récupérer la date du jour au format de l'api pour faire les comparaisons
-  /*  let date = new Date();
-    let dateAff = "";
-    if((date.getMonth() + 1) < 10){
-      dateAff = date.getFullYear() + "-" + 0 + (date.getMonth()+1) + "-" + date.getDate();
-    } else {
-      dateAff = date.getFullYear() + "-" + (date.getMonth()+1) +  date.getDate();
-    }
-  /* Si l'api ne contient aucune commande à la date du jour on simule une date qui existe dans l'api
-  Alors on commente le code si dessus et on décommente la date si dessous */
-
-  let dateAff = "2020-03-25";
-
-  //Permet de récupérer les ID des commandes du jour
-  function getIdCommandesDuJour() {
-    return new Promise(resolve => {
-      $.getJSON('http://vps.e-mingo.net/coopagri/app/index.php?x=1&noAttribute&noLink&x=1&serializationDepth=1?c=Commande&a=trouver', function(commandes) {
-        let idCommandesDuJour = [];
-        let i = 0;
-        $.each(commandes, function(key, val){ //Pour chaque commande on vérifie si la date de livraison est celle du jour
-          if(val["dateLivraison"].includes(dateAff)){
-            idCommandesDuJour[i] = val["id"];
-            i = i + 1;
-          }
-        });
-        resolve(idCommandesDuJour); //Enfin on retourne notre tableau contenant les id des commandes du jour
-      });
-    });
-  }
-
-  //Permet de récupérer l'adresse de livraison d'une commande à partir de son ID
-  async function getAdresseLivraisonId(idCommande){
-    return new Promise(resolve => {
-      $.getJSON('http://vps.e-mingo.net/coopagri/app/index.php?c=api&x=1&o=data&name=commande&v=id|' + idCommande , function(commande) {
-        let adresseLivraison = commande[0]["adresseLivraison"]["toString"];
-        resolve(adresseLivraison);
-      });
-    });
-  }
-
-  //Permet de récupérer les ID des produits présents dans la commande passée en paramètre
-  async function getIdProduitsCommande(idCommande){
-    return new Promise(resolve => {
-      let idProduits = []
-      let i = 0;
-      $.getJSON('http://vps.e-mingo.net/coopagri/app/index.php?c=api&x=1&o=data&name=commande&v=id|' + idCommande , function(commande) {
-        $.each(commande[0]["lignes"], function(key, valLigne){
-          let bool = false;
-          for (let index = 0; index < idProduits.length; index++) { //On vérifie à chaque fois qu'il n'y ait pas de doublons (on a pas besoin plusieurs fois d'un identifiant)
-            if (idProduits[index] == valLigne["produit"]["id"]){
-              bool = true;
-            }
-          }
-          if (bool == false){
-            idProduits[i] = valLigne["produit"]["id"];  //On stock tous les identifiants dans le tableau idProduits[]
-            i = i + 1;
-          }
-        });
-        resolve(idProduits);
-      });
-    });
-  }
-
-  //Permet de récupérer les informations concernant le fournisseur du produit passé en paramètre
-  async function getFournisseurProduit(idProduit){
-    return new Promise(resolve => {
-      $.getJSON('http://vps.e-mingo.net/coopagri/app/index.php?c=api&x=1&o=data&name=produit&v=id|' + idProduit, function(produit) {
-        resolve(produit);
-      });
-    });
-  }
-
-  //Permet de récupérer les adresses des fournisseurs présents dans une commande
-  async function getAdressesFournisseurId(idCommande){
-    let idProduits = await getIdProduitsCommande(idCommande); //On récupère les ID des produits présents dans la commande
-    let adressesFournisseur = [];
-    let infosFournisseur = []
-    let index = 0;
-    let j = 0;
-    while (index < idProduits.length) { //Pour chaque identifiants de produits on fait une requête sur l'api pour accéder aux infos fournisseurs
-      infosFournisseur[index] = await getFournisseurProduit(idProduits[index]);
-      index++;
-    }
-    return new Promise(resolve => {
-      $.each(infosFournisseur, function(key, adrFournisseur){ //Pour chaque fournisseur on récupère son adresse
-        if(adrFournisseur[0]["fournisseur"]){
-          adressesFournisseur[j] = new String;
-          adressesFournisseur[j] = adrFournisseur[0]["fournisseur"]["livraisonAdresses"][0]["toString"]; //On stock ces adresses dans adresseFournisseurDuJour[]
-          j = j + 1;
-        } else {
-          console.log("Produit n'ayant pas de fournisseur dans l'API") //Les fournisseurs de certains produit sont inexistant dans l'api, on l'affiche dans la console
-        }
-      });
-      resolve(adressesFournisseur);
-    });
-  }
-
-  async function test() {
-    //Affichage des ID commandes du jour
-    let idCommandesDuJour = await getIdCommandesDuJour();
-    console.log("ID des commandes du jours");
-    console.log(idCommandesDuJour);
-
-    //Affichage de l'adresse de livraison d'une commande
-    let adresseLivraison =  await getAdresseLivraisonId(idCommandesDuJour[8]);
-    console.log("Adresse de livraison d'une commande passé en paramètre");
-    console.log(adresseLivraison);
-
-    //Affichage des adresses des fournisseurs d'une commande
-    let adressesFournisseur = await getAdressesFournisseurId(idCommandesDuJour[8]);
-    console.log("Adresses des fournisseurs d'une commande passé en paramètre");
-    console.log(adressesFournisseur);
-  }
-  test();
-  </script>
 
       <div>
         <h2>Livraison en cours</h2>
@@ -430,7 +168,7 @@
       <script type="text/javascript">
 
           $('#pause').click(function(){
-            jQuery('message').append('<p class='message'>Vous devez faire une pause !</p>');
+            jQuery('message').append("<p class='message'>Vous devez faire une pause !</p>");
             console.log("test");
           });
       </script>
@@ -486,150 +224,102 @@
 
   </script>
   <script>
-    var adresse = "95 Avenue Baudin";
+  async function initMap() {
+    let idCommandesDuJour = await getIdCommandesDuJour();
+    let adresseLivraison =  await getAdresseLivraisonId(idCommandesDuJour[2]);
+    let adressesFournisseur = await getAdressesFournisseurId(idCommandesDuJour[2]);
+    let maPosition = "Campus Maurois, 12 Allée André Maurois, 87065 Limoges";
+    console.log("Ma position :");
+    console.log(maPosition);
+    console.log("Adresse de livraison :");
+    console.log(adresseLivraison);
+    console.log("Adresse du/des fournisseurs :");
+    console.log(adressesFournisseur);
+    adressesFournisseur[adressesFournisseur.length] = adresseLivraison;
+    console.log("Tous les waypoints de l'itinéraire");
+    console.log(adressesFournisseur);
 
-function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: { lat: 48.856613, lng: 2.352222 }
-  });
-
-  var lineSymbol = {
-    path: google.maps.SymbolPath.CIRCLE,
-    scale: 8,
-    strokeColor: '#250'
-  };
-
-  directionsService = new google.maps.DirectionsService,
-  directionsDisplay = new google.maps.DirectionsRenderer({
-    map: map,
-    polylineOptions: {
-      strokeColor: 'red',
-      strokeOpacity: 1,
-      icons: [{
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 9,
-          strokeColor: '#375',
-          strokeOpacity: 0.8
-        },
-        offset: '100%'
-      }]
-    }
-  });
-
-  var waypts = Array();
-  var checkboxArray = ['60 Avenue Montaigne', '6 Rue du Faubourg Saint-Honoré'];
-  for (var i = 0; i < checkboxArray.length; i++) {
-    waypts.push({
-      location: checkboxArray[i],
-      stopover: true
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
     });
-  }
-  geocoder = new google.maps.Geocoder();
-
-  var route = adresse2LongLatt(geocoder, map, adresse, waypts);
-  autoRefresh(map);
-}
 
 
-function adresse2LongLatt(geocoder, map, adresse, waypts) {
-  geocoder.geocode({ 'address': adresse }, function (results, status) {
-    if (status === 'OK') {
-      map.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        //rajouter l'icone qu'on recevra
-        map: map,
-        animation: google.maps.Animation.DROP,
-        position: results[0].geometry.location
-      });
-      var route = calculateAndDisplayRoute(directionsService, directionsDisplay, adresse, waypts);
-      return route;
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
-}
-
-function moveMarker(map, marker, latlng) {
-  marker.setPosition(latlng);
-  map.panTo(latlng);
-}
-
-
-function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, waypts) {
-
-  var first = new google.maps.LatLng(48.880540, 2.443880);
-  var second = new google.maps.LatLng(48.856613, 2.352222);
-  //var waypoints = Array();
-
-  // for (let index = 0; index < waypts.length; index++) {
-  //   waypoints.push({
-  //     location: new google.maps.LatLng(waypts[index].latLng.lat(), waypts[index].latLng.lng()),
-  //     stopover: true
-  //   });
-  // }
-  directionsService.route({
-      origin: pointA,
-      destination: pointA,
-      waypoints: waypts,
-      optimizeWaypoints: true,
-      travelMode: google.maps.TravelMode.DRIVING
-    }, function (response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-        var route = directionsDisplay.getDirections().routes[0];
-        var points = route.overview_path;
-        return points;
-      } else {
-        window.alert('Directions request failed due to ' + status);
+    directionsService = new google.maps.DirectionsService,
+    directionsDisplay = new google.maps.DirectionsRenderer({
+      map: map,
+      polylineOptions: {
+        strokeColor: 'red',
+        strokeOpacity: 1,
+        icons: [{
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            strokeColor: '#EA4335',
+            strokeOpacity: 0.8
+          },
+          offset: '100%'
+        }]
       }
     });
-}
 
-/*
-function moveToStep(yourmarker,yourroute,c) {
-  if (yourroute.getNumSteps() > c) {
-      yourmarker.setLatLng(yourroute.getStep(c).getLatLng());
-      window.setTimeout(function(){
-          moveToStep(yourmarker,yourroute,c+1);
-      },500);
+    var waypts = Array();
+    for (var i = 0; i < adressesFournisseur.length; i++) {
+      waypts.push({
+        location: adressesFournisseur[i],
+        stopover: true
+      });
+    }
+    geocoder = new google.maps.Geocoder();
+
+    var route = adresse2LongLatt(geocoder, map, maPosition, waypts);
   }
-}
-*/
 
 
-marker=new google.maps.Marker({map:map,icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"});
+  function adresse2LongLatt(geocoder, map, maPosition, waypts) {
+    geocoder.geocode({ 'address': maPosition }, function (results, status) {
+      if (status === 'OK') {
+        map.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+          //rajouter l'icone qu'on recevra
+          map: map,
+          animation: google.maps.Animation.DROP,
+          position: results[0].geometry.location,
+          label: "Vous êtes ici"
+        });
+        var route = calculateAndDisplayRoute(directionsService, directionsDisplay, maPosition, waypts);
+        return route;
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
 
-function autoRefresh(map) {
-  var i, route, marker;
-
-  // route = new google.maps.Polyline({
-  // 	path: [],
-  // 	geodesic : true,
-  // 	strokeColor: '#FF0000',
-  // 	strokeOpacity: 1.0,
-  // 	strokeWeight: 2,
-  // 	editable: false,
-  // 	map:map
-  // });
-
-  // for (i = 0; i < pathCoords.length; i++) {
-  // 	setTimeout(function (coords)
-  // 	{
-  // 		var latlng = new google.maps.LatLng(coords.lat, coords.lng);
-  // 		route.getPath().push(latlng);
-  // 		moveMarker(map, marker, latlng);
-  // 	}, 200 * i, pathCoords[i]);
-  // }
-}
+  function calculateAndDisplayRoute(directionsService, directionsDisplay, maPosition, waypts) {
+    directionsService.route({
+        origin: maPosition,
+        destination: maPosition,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: google.maps.TravelMode.DRIVING
+      }, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+          var route = directionsDisplay.getDirections().routes[0];
+          var points = route.overview_path;
+          return points;
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+  }
 
 
-google.maps.event.addDomListener(window, 'load', initMap);
-</script>
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
-</script>
+
+
+  </script>
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
+  </script>
 <style>
     #map {
       height: 100%;
