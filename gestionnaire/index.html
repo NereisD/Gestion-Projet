@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  <script src="https://code.jquery.com/jquery-3.4.1.js"
+
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
     </script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
@@ -23,176 +25,198 @@
 </head>
 
 <body>
-  <div class="container">
-    <img src="../image/apple.png" alt="logo">
-    <h1>Cooperative 2.0</h1>
-    <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+  <div class="header">
 
-    <div class="container">
-      <div id="map"></div>
-      <script>
-        function initMap() {
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 12,
-            center: { lat: 48.856613, lng: 2.352222 }
+
+      <img src="../image/coopAgri.png" alt="logo">
+      <h1>CoopAgri</h1>
+      <span  id="burger" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+  </div>
+  <div class="row">
+    <div class="col">
+      <a href="#"> Client</a>
+      <a href="#">Commande</a>
+      <a href="#">Livraison</a>
+      <a href="#">Fournisseurs</a>
+      <a href="#">Contact</a>
+      <a href="#">Statistiques</a>
+      <a href="#">Formulaires</a>
+
+    </div>
+  <div class="col-7 col">
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: { lat: 48.856613, lng: 2.352222 }
+        });
+
+        var lineSymbol = {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          strokeColor: '#250'
+        };
+
+        directionsService = new google.maps.DirectionsService,
+          directionsDisplay = new google.maps.DirectionsRenderer({
+            map: map,
+            polylineOptions: {
+              strokeColor: 'red',
+              strokeOpacity: 1,
+              icons: [{
+                icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 9,
+                  strokeColor: '#375',
+                  strokeOpacity: 0.8
+                },
+                offset: '100%'
+              }]
+            }
+          })
+        var waypts = Array();
+        var checkboxArray = ['60 Avenue Montaigne', '6 Rue du Faubourg Saint-Honoré'];
+        for (var i = 0; i < checkboxArray.length; i++) {
+          waypts.push({
+            location: checkboxArray[i],
+            stopover: true
           });
+        }
+        geocoder = new google.maps.Geocoder();
 
-          var lineSymbol = {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 8,
-            strokeColor: '#250'
-          };
+        var route = adresse2LongLatt(geocoder, map, adresse, waypts);
+        autoRefresh(map);
 
-          directionsService = new google.maps.DirectionsService,
-            directionsDisplay = new google.maps.DirectionsRenderer({
+      }
+
+
+      function adresse2LongLatt(geocoder, map, adresse, waypts) {
+        geocoder.geocode({ 'address': adresse }, function (results, status) {
+          if (status === 'OK') {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              //rajouter l'icone qu'on recevra
               map: map,
-              polylineOptions: {
-                strokeColor: 'red',
-                strokeOpacity: 1,
-                icons: [{
-                  icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 9,
-                    strokeColor: '#375',
-                    strokeOpacity: 0.8
-                  },
-                  offset: '100%'
-                }]
-              }
-            })
-          var waypts = Array();
-          var checkboxArray = ['60 Avenue Montaigne', '6 Rue du Faubourg Saint-Honoré'];
-          for (var i = 0; i < checkboxArray.length; i++) {
-            waypts.push({
-              location: checkboxArray[i],
-              stopover: true
+              animation: google.maps.Animation.DROP,
+              position: results[0].geometry.location
             });
+            var route = calculateAndDisplayRoute(directionsService, directionsDisplay, adresse, waypts);
+            return route;
+
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
           }
-          geocoder = new google.maps.Geocoder();
+        });
+      }
 
-          var route = adresse2LongLatt(geocoder, map, adresse, waypts);
-          autoRefresh(map);
-
-        }
-
-
-        function adresse2LongLatt(geocoder, map, adresse, waypts) {
-          geocoder.geocode({ 'address': adresse }, function (results, status) {
-            if (status === 'OK') {
-              map.setCenter(results[0].geometry.location);
-              var marker = new google.maps.Marker({
-                //rajouter l'icone qu'on recevra
-                map: map,
-                animation: google.maps.Animation.DROP,
-                position: results[0].geometry.location
-              });
-              var route = calculateAndDisplayRoute(directionsService, directionsDisplay, adresse, waypts);
-              return route;
-
-            } else {
-              alert('Geocode was not successful for the following reason: ' + status);
-            }
-          });
-        }
-
-        function moveMarker(map, marker, latlng) {
-          marker.setPosition(latlng);
-          map.panTo(latlng);
-        }
+      function moveMarker(map, marker, latlng) {
+        marker.setPosition(latlng);
+        map.panTo(latlng);
+      }
 
 
-        function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, waypts) {
+      function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, waypts) {
 
-          var first = new google.maps.LatLng(48.880540, 2.443880);
-          var second = new google.maps.LatLng(48.856613, 2.352222);
-          //var waypoints = Array();
+        var first = new google.maps.LatLng(48.880540, 2.443880);
+        var second = new google.maps.LatLng(48.856613, 2.352222);
+        //var waypoints = Array();
 
-          // for (let index = 0; index < waypts.length; index++) {
-          //   waypoints.push({
-          //     location: new google.maps.LatLng(waypts[index].latLng.lat(), waypts[index].latLng.lng()),
-          //     stopover: true
-          //   });
-          // }
+        // for (let index = 0; index < waypts.length; index++) {
+        //   waypoints.push({
+        //     location: new google.maps.LatLng(waypts[index].latLng.lat(), waypts[index].latLng.lng()),
+        //     stopover: true
+        //   });
+        // }
 
-          directionsService.route({
-            origin: pointA,
-            destination: pointA,
-            waypoints: waypts,
-            optimizeWaypoints: true,
-            travelMode: google.maps.TravelMode.DRIVING
-          }, function (response, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-              directionsDisplay.setDirections(response);
-              var route = directionsDisplay.getDirections().routes[0];
-              var points = route.overview_path;
-              return points;
-            } else {
-              window.alert('Directions request failed due to ' + status);
-            }
-          });
-        }
-
-        /*
-        function moveToStep(yourmarker,yourroute,c) {
-              if (yourroute.getNumSteps() > c) {
-                  yourmarker.setLatLng(yourroute.getStep(c).getLatLng());
-                  window.setTimeout(function(){
-                      moveToStep(yourmarker,yourroute,c+1);
-                  },500);
-              }
+        directionsService.route({
+          origin: pointA,
+          destination: pointA,
+          waypoints: waypts,
+          optimizeWaypoints: true,
+          travelMode: google.maps.TravelMode.DRIVING
+        }, function (response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+            var route = directionsDisplay.getDirections().routes[0];
+            var points = route.overview_path;
+            return points;
+          } else {
+            window.alert('Directions request failed due to ' + status);
           }
-          */
+        });
+      }
 
-
-        marker = new google.maps.Marker({ map: map, icon: "http://maps.google.com/mapfiles/ms/micons/blue.png" });
-
-        function autoRefresh(map) {
-          var i, route, marker;
-
-          // route = new google.maps.Polyline({
-          // 	path: [],
-          // 	geodesic : true,
-          // 	strokeColor: '#FF0000',
-          // 	strokeOpacity: 1.0,
-          // 	strokeWeight: 2,
-          // 	editable: false,
-          // 	map:map
-          // });
-
-          // for (i = 0; i < pathCoords.length; i++) {
-          // 	setTimeout(function (coords)
-          // 	{
-          // 		var latlng = new google.maps.LatLng(coords.lat, coords.lng);
-          // 		route.getPath().push(latlng);
-          // 		moveMarker(map, marker, latlng);
-          // 	}, 200 * i, pathCoords[i]);
-          // }
+      /*
+      function moveToStep(yourmarker,yourroute,c) {
+            if (yourroute.getNumSteps() > c) {
+                yourmarker.setLatLng(yourroute.getStep(c).getLatLng());
+                window.setTimeout(function(){
+                    moveToStep(yourmarker,yourroute,c+1);
+                },500);
+            }
         }
+        */
 
 
-        google.maps.event.addDomListener(window, 'load', initMap);
+      marker = new google.maps.Marker({ map: map, icon: "http://maps.google.com/mapfiles/ms/micons/blue.png" });
+
+      function autoRefresh(map) {
+        var i, route, marker;
+
+        // route = new google.maps.Polyline({
+        // 	path: [],
+        // 	geodesic : true,
+        // 	strokeColor: '#FF0000',
+        // 	strokeOpacity: 1.0,
+        // 	strokeWeight: 2,
+        // 	editable: false,
+        // 	map:map
+        // });
+
+        // for (i = 0; i < pathCoords.length; i++) {
+        // 	setTimeout(function (coords)
+        // 	{
+        // 		var latlng = new google.maps.LatLng(coords.lat, coords.lng);
+        // 		route.getPath().push(latlng);
+        // 		moveMarker(map, marker, latlng);
+        // 	}, 200 * i, pathCoords[i]);
+        // }
+      }
+
+
+      google.maps.event.addDomListener(window, 'load', initMap);
 
 
 
-      </script>
+    </script>
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASkEyGK2Y2T7IJPozcR_g6S6Uo8AIOzic&callback=initMap">
   </script>
 
+      <div>
+        <h2>Livraison en cours</h2>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium quam consectetur, veniam perferendis
+          offici</p>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium quam consectetur, veniam perferendis
+          offici</p>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">Contacter un
+          livreur </button>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#creerclient">Créer une
+          livraison </button>
+      </div>
 
-    </div>
+  </div>
 
-    <div>
-      <h2>Livraison en cours</h2>
-      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium quam consectetur, veniam perferendis
-        offici</p>
-      <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Praesentium quam consectetur, veniam perferendis
-        offici</p>
-      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">Contacter un
-        livreur </button>
-      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#creerclient">Créer une
-        livraison </button>
-    </div>
+
+
+
+  <div class="col">
+    3 of 3
+  </div>
+  </div>
+</div>
+
 
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
@@ -284,10 +308,31 @@
 
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="#">About</a>
-      <a href="#">Services</a>
-      <a href="#">Clients</a>
-      <a href="#">Contact</a>
+      <div class="message">
+
+      </div>
+      <script type="text/javascript">
+
+          $('#pause').click(function(){
+            jQuery('message').append('<p class='message'>Vous devez faire une pause !</p>');
+            console.log("test");
+          });
+      </script>
+      <div class="menu">
+
+
+            <button  id="pause" type="button" class="btn btn-secondary menubtn">Pause</button>
+            <button type="button" class="btn btn-secondary menubtn">Rappel</button>
+            <button type="button" class="btn btn-secondary menubtn">alerte</button>
+            <button type="button" class="btn btn-secondary menubtn">Envoyer</button>
+            <br>
+      <input type="text" name="" value="message">
+      <button type="button" class="btn btn-primary">Envoyer</button>
+    </div>
+
+
+
+
     </div>
   </div>
 
@@ -322,7 +367,7 @@
 
 
 
-    
+
   </script>
   <script>
     var adresse = "95 Avenue Baudin";
@@ -393,7 +438,7 @@ function adresse2LongLatt(geocoder, map, adresse, waypts) {
 function moveMarker(map, marker, latlng) {
   marker.setPosition(latlng);
   map.panTo(latlng);
-} 
+}
 
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, waypts) {
@@ -442,7 +487,7 @@ marker=new google.maps.Marker({map:map,icon:"http://maps.google.com/mapfiles/ms/
 
 function autoRefresh(map) {
   var i, route, marker;
-  
+
   // route = new google.maps.Polyline({
   // 	path: [],
   // 	geodesic : true,
@@ -452,7 +497,7 @@ function autoRefresh(map) {
   // 	editable: false,
   // 	map:map
   // });
-  
+
   // for (i = 0; i < pathCoords.length; i++) {
   // 	setTimeout(function (coords)
   // 	{

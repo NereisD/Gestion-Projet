@@ -11,7 +11,7 @@ h1 {
 }
 
 #map{
-    
+
     height: 90%;
     width: 70%;
 }
@@ -39,7 +39,7 @@ section {
            #map {
             height: 100%;
           }
-      
+
           /* Optional: Makes the sample page fill the window. */
           html,
           body {
@@ -65,7 +65,7 @@ html, body {
     overflow-x: hidden;
     padding-top: 60px;
   }
-  
+
   .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
@@ -73,11 +73,11 @@ html, body {
     color: #222222;
     display: block;
   }
-  
+
   .sidenav a:hover {
     color: #e4e4e4;
   }
-  
+
   .sidenav .closebtn {
     position: absolute;
     top: 0;
@@ -85,11 +85,46 @@ html, body {
     font-size: 36px;
     margin-left: 50px;
   }
-  
+
   @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
   span {
-      margin-left: 50%;
+      margin-left: 67%;
   }
+
+  .col {
+    background-color: beige;
+    border: 1px solid black;
+  }
+
+  .header {
+    background-color: aquamarine;
+  }
+
+  a{
+    font-size: 20px;
+    margin: 2%;
+    margin-left: 4%;
+    display: flex;
+  }
+
+.menubtn {
+  font-size: 24px;
+  width: 20%;
+  margin: 2%;
+}
+.btn-primary {
+  font-size: 24px;
+  width: 20%;
+  margin: 2%;
+}
+input {
+  font-size: 24px;
+}
+
+.menu {
+
+  margin-top: 150%;
+}

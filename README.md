@@ -37,12 +37,18 @@ Pour faire afficher les données de l’api nous avons utiliser des requêtes AJ
 # Maquettes de notre site
 Voici quelque maquettes de notre site et application	 pour avoir en avoir un  aperçu.
 
-![](Projet%20JS/87104552_1232613686944328_8071030352832888832_n.png)
-![](Projet%20JS/86932318_334692114096494_8956171899348451328_n.png)
-
-
-![](Projet%20JS/86972343_835038506973422_3568751234632384512_n.png)
+![](image/87104552_1232613686944328_8071030352832888832_n.png)
+![](image/86932318_334692114096494_8956171899348451328_n.png)s
+![](image/86972343_835038506973422_3568751234632384512_n.png)
 
 
 # Collaboration
 Projet réalisé dans le cadre de l’obtention de notre diplôme universitaire de technologie, en collaboration avec Ali Es-skouri, Florian Laroche et Antoine Ollé.
+
+Antoine Ollé c'est occupé de toutes la réalisation des maquettes ainsi que l'implémentation dans le code des modals pour permettre l'insertion des données dans l'api.
+
+Florian Laroche c'est occupé de la connexion avec l'api permettant de récupérer les données et de les afficher. Il a aussi réalisé l'implémentation du point sur la map symbolisant les conducteurs afin de permettre un suivi sur l'application.
+
+Ali Es-Skouri a réalisé toute la création de la map qui se retrouve dans l'application ainsi que dans le gestionnaire. Ainsi que la mise en place pour acceuillir les données sous la bonne forme de l'API pour la map.
+
+Nereis Dugaleix a réalisé la partie graphique de l'application et du gestionnaire ainsi que l'implémentation de la partie gestionnaire des messages de l'application web de gestion.
