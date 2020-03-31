@@ -224,10 +224,12 @@
 
   </script>
   <script>
+
   async function initMap() {
     let idCommandesDuJour = await getIdCommandesDuJour(); //On récupère les id des commandes du jour
     let adresseLivraison =  await getAdresseLivraisonId(idCommandesDuJour[2]);  //On récupère l'adresse de livraison de la commande numéro 3
     let adressesFournisseur = await getAdressesFournisseurId(idCommandesDuJour[2]); //On récupère les adresses des fournisseurs de la commande numéro 3
+    let heureLivraison = await getHeureLivraison(idCommandesDuJour[2]);
     let maPosition = "Campus Maurois, 12 Allée André Maurois, 87065 Limoges"; //On définit le point de départ comme étant l'IUT
     console.log("Ma position :");
     console.log(maPosition);
@@ -240,8 +242,10 @@
       tableauAdresses[i] = adressesFournisseur[i];
     }
     tableauAdresses[adressesFournisseur.length] = adresseLivraison; //On crée un tableau d'adresse qui contient tous les fournisseurs et en dernier l'adresse de livraison
-    console.log("Tous les waypoints de l'itinéraire");
+    console.log("Tous les waypoints de l'itinéraire :");
     console.log(tableauAdresses);
+    console.log("Date et heure de livraison :");
+    console.log(heureLivraison);
 
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,

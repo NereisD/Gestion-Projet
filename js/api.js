@@ -29,6 +29,15 @@ function getIdCommandesDuJour() {
     });
 }
 
+function getHeureLivraison(idCommande) {
+  return new Promise(resolve => {
+  $.getJSON('http://vps.e-mingo.net/coopagri/app/index.php?c=api&x=1&o=data&name=commande&v=id|' + idCommande, function (commande) {
+      let heureLivraison = commande[0]["dateLivraison"];
+      resolve(heureLivraison);
+  });
+  });
+}
+
 //Permet de récupérer l'adresse de livraison d'une commande à partir de son ID
 async function getAdresseLivraisonId(idCommande) {
     return new Promise(resolve => {
