@@ -35,11 +35,7 @@ Pour faire afficher la carte et en même temps les livreurs et les coordonnées 
 Pour faire afficher les données de l’api nous avons utiliser des requêtes AJAX ainsi que jQuery.
 
 # Maquettes de notre site
-Voici quelque maquettes de notre site et application	 pour avoir en avoir un  aperçu.
-
-![](image/87104552_1232613686944328_8071030352832888832_n.png)
-![](image/86932318_334692114096494_8956171899348451328_n.png)
-![](image/86972343_835038506973422_3568751234632384512_n.png)
+Voici quelque maquettes de notre site et applicationelle seront disponible dans le dossier maquette.
 
 
 # Collaboration
